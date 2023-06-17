@@ -1,6 +1,9 @@
 node_modules/
 fb-credentials.js
 API_KEYS.js
+app.json
+google-services.json
+GoogleService-info.plist
 
 .expo/
 dist/

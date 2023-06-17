@@ -71,12 +71,14 @@ const ProfileScreen = () => {
     return (
       <View style={styles.container}>
         <View style={styles.profileContainer}>
-          <Image
-            style={styles.profilePic}
-            source={{
-              uri: userSummary.avatarfull,
-            }}
-          />
+          {userSummary.avatarfull !== undefined ? (
+            <Image
+              style={styles.profilePic}
+              source={{
+                uri: userSummary.avatarfull,
+              }}
+            />
+          ) : null}
           <View style={styles.profileTextContainer}>
             <Text style={styles.usernameText}>{userSummary.personaname}</Text>
             <Text style={styles.idText}>ID: {userSummary.steamid}</Text>
@@ -111,10 +113,9 @@ const ProfileScreen = () => {
     return (
       <View style={styles.container}>
         <View style={styles.profileContainer}>
-          <Image style={styles.profilePic} />
           <View style={styles.profileTextContainer}>
             <Text style={styles.usernameText}></Text>
-            <Text style={styles.idText}>ID: </Text>
+            <Text style={styles.idText}></Text>
           </View>
         </View>
         <View style={styles.profileListContainer}>

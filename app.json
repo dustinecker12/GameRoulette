@@ -15,16 +15,40 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dustinecker.gameroulette",
+      "buildNumber": "1.0.0",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
+      "package": "com.dustinecker.gameroulette",
+      "versionCode": 1,
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "config": {
+        "apiKey": "AIzaSyD5s6eT7nzRKMVFhtL7mMpYOZ4qFmqwAo8",
+        "authDomain": "gameroulette-34ee2.firebaseapp.com",
+        "projectId": "gameroulette-34ee2",
+        "storageBucket": "gameroulette-34ee2.appspot.com",
+        "messagingSenderId": "1037143296036",
+        "appId": "1:1037143296036:web:e5b2a28c18a9b4aeb1f0b1",
+        "measurementId": "G-WSW55NS92W"
+      }
+    },
+    "plugins": [
+      "expo-build-properties",
+      "@react-native-firebase/app"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "79df6f96-453b-480e-938c-1cc4dd0ef9c8"
+      }
     }
   }
 }

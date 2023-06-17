@@ -1,4 +1,7 @@
 import 'react-native-gesture-handler';
+// import * as Analytics from 'expo-firebase-analytics';
+import analytics from '@react-native-firebase/analytics';
+import React, { useRef } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import UserSettingsContextProvider from './context/UserSettingsContext';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -56,9 +59,29 @@ function Home() {
 }
 
 export default function App() {
+  const navigationRef = useRef();
+  const routeNameRef = useRef();
+
   return (
     <UserSettingsContextProvider>
-      <NavigationContainer>
+      <NavigationContainer
+        ref={navigationRef}
+        onReady={() =>
+          (routeNameRef.current = navigationRef.current.getCurrentRoute().name)
+        }
+        onStateChange={async () => {
+          const previousRouteName = routeNameRef.current;
+          const currentRouteName = navigationRef.current.getCurrentRoute().name;
+          if (previousRouteName !== currentRouteName) {
+            await analytics().logEvent('screen_view', {
+              screen_name: currentRouteName,
+              screen_class: currentRouteName,
+            });
+          }
+          // Save the current route name for later comparison
+          routeNameRef.current = currentRouteName;
+        }}
+      >
         <Stack.Navigator>
           <Stack.Screen
             name="Login"
