@@ -36,10 +36,11 @@ const SettingsScreen = () => {
   useEffect(() => {
     setUserSettings({
       steamId: userSettingsContext.settings.steamId,
-      hidePlayedGames: userSettingsContext.settings.hidePlayedGames,
-      hideDownvotedGames: userSettingsContext.settings.hideDownvotedGames,
+      hidePlayedGames: userSettingsContext.settings.hidePlayedGames ?? false,
+      hideDownvotedGames:
+        userSettingsContext.settings.hideDownvotedGames ?? false,
       showOnlyMultiplayerGames:
-        userSettingsContext.settings.showOnlyMultiplayerGames,
+        userSettingsContext.settings.showOnlyMultiplayerGames ?? false,
     });
   }, [userSettingsContext]);
 

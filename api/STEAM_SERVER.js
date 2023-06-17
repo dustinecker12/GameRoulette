@@ -33,7 +33,6 @@ export const getUserSummary = async (userId, callback) => {
     );
     callback(response.data.response.players);
   } catch {
-    console.log('Error fetching user summary');
     callback(null);
   }
 };
@@ -45,7 +44,6 @@ export const getUserOwnedGames = async (userId, callback) => {
     );
     callback(response.data.response);
   } catch {
-    console.log('Error fetching user owned games');
     callback(null);
   }
 };
@@ -57,7 +55,6 @@ export const getUserFriends = async (userId, callback) => {
     );
     callback(response.data.friendslist.friends);
   } catch {
-    console.log('Error fetching user friends');
     callback(null);
   }
 };

@@ -17,9 +17,19 @@ const UserSettingsContextProvider = ({ children }) => {
     setUserSettings(settings);
   };
 
+  const clearSettings = () => {
+    setUserSettings({
+      steamId: '',
+      hideDownvotedGames: false,
+      hidePlayedGames: false,
+      showOnlyMultiplayerGames: false,
+    });
+  };
+
   const value = {
     settings: userSettings,
     saveSettings: saveSettings,
+    clearSettings: clearSettings,
   };
 
   return (

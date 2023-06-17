@@ -27,12 +27,10 @@ export function handleSignUp(email, password) {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const settings = {
-        settings: {
-          steamId: '',
-          hidePlayedGames: false,
-          hideDownvotedGames: false,
-          showOnlyMultiplayerGames: false,
-        },
+        steamId: '',
+        hidePlayedGames: false,
+        hideDownvotedGames: false,
+        showOnlyMultiplayerGames: false,
       };
       setDoc(doc(db, 'userProfile', userCredential.user.uid), settings);
     })
@@ -74,6 +72,7 @@ export async function getUserProfile(uid, callback) {
 }
 
 export async function saveUserProfile(uid, settings) {
+  console.log(settings);
   await setDoc(doc(db, 'userProfile', uid), settings);
 }
 

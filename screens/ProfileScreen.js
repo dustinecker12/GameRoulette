@@ -95,6 +95,7 @@ const ProfileScreen = () => {
               auth
                 .signOut()
                 .then(() => {
+                  userSettingsContext.clearSettings();
                   navigation.replace('Login');
                 })
                 .catch((error) => alert(error.message));
@@ -132,6 +133,7 @@ const ProfileScreen = () => {
               auth
                 .signOut()
                 .then(() => {
+                  userSettingsContext.clearSettings();
                   navigation.replace('Login');
                 })
                 .catch((error) => alert(error.message));
