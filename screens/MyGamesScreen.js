@@ -1,6 +1,8 @@
 import { UserSettingsContext } from '../context/UserSettingsContext';
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, Pressable, Alert } from 'react-native';
+import { useIsFocused, useRoute } from '@react-navigation/native';
+import { Accelerometer } from 'expo-sensors';
 
 import GameList from '../components/GameList';
 import { getUserOwnedGames } from '../api/STEAM_SERVER';
@@ -11,6 +13,37 @@ const MyGamesScreen = () => {
   const [filteredGames, setFilteredGames] = useState([]);
 
   const userSettingsContext = useContext(UserSettingsContext);
+  const isFocused = useIsFocused();
+  const route = useRoute();
+
+  useEffect(() => {
+    if (isFocused) {
+      const configureShake = (onShake) => {
+        Accelerometer.setUpdateInterval(100);
+
+        const onUpdate = ({ x, y, z }) => {
+          const acceleration = Math.sqrt(x * x + y * y + z * z);
+          const sensibility = 1.8;
+          if (acceleration >= sensibility) {
+            onShake(acceleration);
+          }
+        };
+
+        Accelerometer.addListener(onUpdate);
+      };
+
+      const subscription = configureShake((acceleration) => {
+        if (filteredGames.length > 0) {
+          Alert.alert(
+            'Your random game!',
+            filteredGames[Math.floor(Math.random() * filteredGames.length)].name
+          );
+        }
+      });
+    } else {
+      Accelerometer.removeAllListeners();
+    }
+  }, [isFocused, route]);
 
   useEffect(() => {
     if (auth.currentUser != '') {
