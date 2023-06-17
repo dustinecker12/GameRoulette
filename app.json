@@ -32,13 +32,13 @@
     "web": {
       "favicon": "./assets/favicon.png",
       "config": {
-        "apiKey": "AIzaSyD5s6eT7nzRKMVFhtL7mMpYOZ4qFmqwAo8",
-        "authDomain": "gameroulette-34ee2.firebaseapp.com",
-        "projectId": "gameroulette-34ee2",
-        "storageBucket": "gameroulette-34ee2.appspot.com",
-        "messagingSenderId": "1037143296036",
-        "appId": "1:1037143296036:web:e5b2a28c18a9b4aeb1f0b1",
-        "measurementId": "G-WSW55NS92W"
+        "apiKey": "hidden",
+        "authDomain": "hidden",
+        "projectId": "hidden",
+        "storageBucket": "hidden",
+        "messagingSenderId": "hidden",
+        "appId": "hidden",
+        "measurementId": "hidden"
       }
     },
     "plugins": [
