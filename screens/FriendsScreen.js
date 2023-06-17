@@ -1,49 +1,63 @@
-import React, { useState, useEffect } from 'react';
+import { UserSettingsContext } from '../context/UserSettingsContext';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Feather } from '@expo/vector-icons';
 
-const FriendsScreen = ({ route, navigation }) => {
+import FriendList from '../components/FriendList';
+import { getUserFriends } from '../api/STEAM_SERVER';
+import { auth, getUserProfile } from '../helpers/fb-methods';
+
+const FriendsScreen = () => {
+  const [userFriends, setUserFriends] = useState([]);
+
+  const userSettingsContext = useContext(UserSettingsContext);
+
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Profile');
-          }}
-        >
-          <Feather
-            style={{ marginLeft: 15, marginRight: 15 }}
-            name="user"
-            size={24}
-          />
-        </TouchableOpacity>
-      ),
-      headerRight: () => (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Settings');
-          }}
-        >
-          <Feather style={{ marginRight: 15 }} name="settings" size={24} />
-        </TouchableOpacity>
-      ),
-    });
-  });
+    if (auth.currentUser != '') {
+      if (userSettingsContext.settings.steamId == '') {
+        getUserProfile(auth.currentUser.uid, (data) => {
+          if (data != undefined) {
+            userSettingsContext.saveSettings(data);
+          }
+        });
+      }
+    }
+  }, []);
 
-  return (
+  useEffect(() => {
+    if (userSettingsContext.settings.steamId != '') {
+      try {
+        getUserFriends(userSettingsContext.settings.steamId, (data) => {
+          if (data != null) setUserFriends(data);
+        });
+      } catch {
+        alert('Unable to fetch friends list!');
+      }
+    }
+  }, [userSettingsContext]);
+
+  try {
+    return (
+      <View style={styles.container}>
+        {userSettingsContext.settings.steamId === '' ? (
+          <Text>Setup profile to display your friends list</Text>
+        ) : (
+          <FriendList friends={userFriends} />
+        )}
+      </View>
+    );
+  } catch {
     <View style={styles.container}>
-      <Text>Friends Screen</Text>
-    </View>
-  );
+      <Text>Setup profile to display your friends list</Text>
+    </View>;
+  }
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingVertical: 5,
   },
 });
 

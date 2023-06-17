@@ -2,12 +2,15 @@ import { UserSettingsContext } from '../context/UserSettingsContext';
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, Text, View, Pressable, Alert } from 'react-native';
 
-import GameList from '../components/GameList';
+import SharedGameList from '../components/SharedGamesList';
 import { getUserOwnedGames } from '../api/STEAM_SERVER';
 import { auth, getUserProfile } from '../helpers/fb-methods';
 
-const MyGamesScreen = () => {
+const SharedGamesScreen = ({ route }) => {
+  const [friendDetails, setFriendDetails] = useState(route.params);
   const [userGames, setUserGames] = useState([]);
+  const [friendsGames, setFriendsGames] = useState([]);
+  const [mutualGames, setMutualGames] = useState([]);
   const [filteredGames, setFilteredGames] = useState([]);
 
   const userSettingsContext = useContext(UserSettingsContext);
@@ -16,6 +19,7 @@ const MyGamesScreen = () => {
     if (auth.currentUser != '') {
       if (userSettingsContext.settings.steamId == '') {
         getUserProfile(auth.currentUser.uid, (data) => {
+          console.log(data);
           if (data != undefined) {
             userSettingsContext.saveSettings(data);
           }
@@ -27,9 +31,14 @@ const MyGamesScreen = () => {
   useEffect(() => {
     if (userSettingsContext.settings.steamId != '') {
       try {
-        getUserOwnedGames(userSettingsContext.settings.steamId, (data) => {
+        // getUserOwnedGames(userSettingsContext.settings.steamId, (data) => {
+        //   if (data != null) {
+        //     setUserGames(data.games);
+        //   }
+        // });
+        getUserOwnedGames(friendDetails.steamid, (data) => {
           if (data != null) {
-            setUserGames(data.games);
+            setFriendsGames(data.games);
           }
         });
       } catch {
@@ -39,34 +48,27 @@ const MyGamesScreen = () => {
   }, [userSettingsContext]);
 
   useEffect(() => {
-    applyFilters();
-  }, [userGames]);
-
-  function applyFilters() {
-    let tempFilteredGames = userGames;
-
-    if (userSettingsContext.settings.hidePlayedGames) {
-      tempFilteredGames = tempFilteredGames.filter((game) => {
-        return game.playtime_forever == 0;
-      });
-    }
-
-    setFilteredGames(tempFilteredGames);
-  }
+    // applyPreCombineFilters()
+    // combine()
+    // applyPostCombineFilters()
+    // apply filters to each to eliminate playtime, then combine, then apply other filters
+    // applyFilters();
+    // setFilteredGames(friendsGames);
+  }, [userGames, friendsGames]);
 
   try {
     return (
       <View style={styles.container}>
         <View style={styles.statsContainer}>
           <Text style={styles.statsContainerText}>
-            Games: {filteredGames.length}
+            Games: {friendsGames.length}
           </Text>
           <Pressable
             style={styles.button}
             onPress={() => {
               Alert.alert(
                 'Your random game!',
-                filteredGames[Math.floor(Math.random() * filteredGames.length)]
+                friendsGames[Math.floor(Math.random() * friendsGames.length)]
                   .name
               );
             }}
@@ -77,7 +79,7 @@ const MyGamesScreen = () => {
         {userSettingsContext.settings.steamId === '' ? (
           <Text>Setup profile to display your games</Text>
         ) : (
-          <GameList games={filteredGames} />
+          <SharedGameList games={friendsGames} />
         )}
       </View>
     );
@@ -123,4 +125,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyGamesScreen;
+export default SharedGamesScreen;
